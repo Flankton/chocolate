@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\CocoaLoteController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use Illuminate\Routing\Route as RoutingRoute;
 use PHPUnit\TextUI\XmlConfiguration\Group;
 use PHPUnit\TextUI\XmlConfiguration\Groups;
 
@@ -21,4 +23,9 @@ Route::get('/greeting', [UserController::class, 'index']);
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+Route::prefix('private/')->group(function () {
+    Route::resource('cocoa_lote', CocoaLoteController::class)
+    ->except(['create', 'edit']);
 });

@@ -16,6 +16,7 @@ class CreateChocolateBarTable extends Migration
         Schema::create('chocolate_bar', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('public_id');
+            $table->boolean('deleted')->default(false);
             $table->timestamps();
         });
     }

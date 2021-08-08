@@ -18,6 +18,7 @@ class CreateChocolateRecipeTable extends Migration
             $table->unsignedBigInteger('cocoa_lote_id');
             $table->unsignedBigInteger('chocolate_bar_id');
             $table->string('weight');
+            $table->boolean('deleted')->default(false);
             $table->timestamps();
             $table->foreign('cocoa_lote_id')->references('id')->on('cocoa_lote');
             $table->foreign('chocolate_bar_id')->references('id')->on('chocolate_bar');

@@ -18,6 +18,7 @@ class CreateCocoaLoteTable extends Migration
             $table->string('description')->nullable;
             $table->unsignedBigInteger('provider_id');
             $table->boolean('organic');
+            $table->boolean('deleted')->default(false);
             $table->timestamps();
             $table->foreign('provider_id')->references('id')->on('provider');
         });
