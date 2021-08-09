@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ChocolateBar extends Model
 {
@@ -15,15 +16,15 @@ class ChocolateBar extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
-    //  /**
-    //  * Return providers from a lote of cocoa
-    //  *
-    //  * @return BelongsTo
-    //  */
-    // public function provider() : BelongsTo
-    // {
-    //     return $this->belongsTo(Provider::class);
-    // }
+     /**
+     * Return recipes
+     *
+     * @return ToHasMany
+     */
+    public function recipes() : HasMany
+    {
+        return $this->HasMany(ChocolateRecipe::class);
+    }
 
     protected $fillable = [
         'public_id',

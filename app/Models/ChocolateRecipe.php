@@ -15,15 +15,25 @@ class ChocolateRecipe extends Model
     protected $primaryKey = 'id';
     public $timestamps = false;
 
-    //  /**
-    //  * Return providers from a lote of cocoa
-    //  *
-    //  * @return BelongsTo
-    //  */
-    // public function provider() : BelongsTo
-    // {
-    //     return $this->belongsTo(Provider::class);
-    // }
+     /**
+     * Return lotes
+     *
+     * @return BelongsTo
+     */
+    public function cocoaLote() : BelongsTo
+    {
+        return $this->belongsTo(CocoaLote::class);
+    }
+
+     /**
+     * Return chocolates bar
+     *
+     * @return BelongsTo
+     */
+    public function chocolateBar() : BelongsTo
+    {
+        return $this->belongsTo(ChocolateBar::class);
+    }
 
     protected $fillable = [
         'cocoa_lote_id',

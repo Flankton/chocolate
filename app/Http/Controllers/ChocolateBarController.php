@@ -27,6 +27,7 @@ class ChocolateBarController extends Controller
             'id' => $myId,
             'deleted' => false]
             )
+        ->with('recipes')
         ->first();
 
         return response()->json($ChocolateBar);

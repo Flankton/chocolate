@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 class ChocolateRecipeController extends Controller
 {
     /**
-     * Show a selected chocolate bar
+     * Show a selected chocolate recipe
      *
      * @param  int  $myId
      * @return JsonResponse
@@ -27,6 +27,8 @@ class ChocolateRecipeController extends Controller
             'id' => $myId,
             'deleted' => false]
             )
+        ->with('cocoaLote')
+        ->with('chocolateBar')
         ->first();
 
         return response()->json($ChocolateRecipe);
@@ -42,6 +44,8 @@ class ChocolateRecipeController extends Controller
     {
         
         $ChocolateRecipes = ChocolateRecipe::where('deleted', false)
+        ->with('cocoaLote')
+        ->with('chocolateBar')
         ->get();
 
         return response()->json($ChocolateRecipes);
@@ -49,17 +53,18 @@ class ChocolateRecipeController extends Controller
     }
 
       /**
-     * Create new chocolate bar
+     * Create new chocolate recipe
      *
      * @param Request $request
      * @return JsonResponse
      */
     public function store(Request $request) : JsonResponse
     {
+        
             $request->validate([
-                'cocoa_lote_id' => 'required|int',
-                'chocolate_bar_id' => 'required|int',
-                'weight' => 'required',
+                'cocoa_lote_id' => 'required|integer',
+                'chocolate_bar_id'  => 'required|integer',
+                'weight'  => 'required'
             ]);
 
             $data = $request->only([
@@ -79,7 +84,7 @@ class ChocolateRecipeController extends Controller
     }
 
       /**
-     * Update the chocolate bar selected
+     * Update the chocolate recipe selected
      *
      * @param int myid
      * @param Request $request
@@ -118,7 +123,7 @@ class ChocolateRecipeController extends Controller
     }
 
       /**
-     * Update the chocolate bar selected
+     * Update the chocolate recipe selected
      *
      * @param int myid
      * @param Request $request
