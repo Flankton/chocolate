@@ -6,12 +6,12 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class ChocolateBar extends Model
+class ChocolateRecipe extends Model
 {
     use HasFactory;
     
 
-    protected $table = 'chocolate_bar';
+    protected $table = 'chocolate_recipe';
     protected $primaryKey = 'id';
     public $timestamps = false;
 
@@ -26,7 +26,9 @@ class ChocolateBar extends Model
     // }
 
     protected $fillable = [
-        'public_id',
+        'cocoa_lote_id',
+        'chocolate_bar_id',
+        'weight',
         'deleted',
         'created_at',
         'updated_at'

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CocoaLoteController;
 use App\Http\Controllers\ChocolateBarController;
+use App\Http\Controllers\ChocolateRecipeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -29,7 +30,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::prefix('private/')->group(function () {
     Route::resource('cocoa_lote', CocoaLoteController::class)
     ->except(['create', 'edit']);
+
+    Route::resource('chocolate_recipe', ChocolateRecipeController::class)
+    ->except(['create', 'edit']);
 });
+
 Route::prefix('public')->group(function () {
     Route::resource('chocolate_bar', ChocolateBarController::class)
     ->except(['create', 'edit']);
