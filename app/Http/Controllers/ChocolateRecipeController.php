@@ -73,6 +73,13 @@ class ChocolateRecipeController extends Controller
                 'weight',
             ]);
 
+            if($this->limitWeight($request->chocolate_bar_id, $request->weight)){
+                return response()->json([
+                    'code'      =>  401,
+                    'message'   =>  'Limite de peso ultrapassado'
+                ]);
+            }
+
             $data['created_at'] = date('Y-m-d H:i:s');
             
             ChocolateRecipe::create($data);
@@ -149,4 +156,15 @@ class ChocolateRecipeController extends Controller
                 'message'   =>  'Produto deletado com sucesso'
             ]);
     }
+
+    private function limitWeight($chocolateId, $weight){
+        $weightMax = ChocolateRecipe::where('chocolate_bar_id', $chocolateId)
+            ->sum('weight');
+        
+            if($weightMax+$weight>500){
+                return true;
+            }
+            return false;
+    }
+
 }

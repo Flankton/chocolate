@@ -137,4 +137,15 @@ class ChocolateBarController extends Controller
                 'message'   =>  'Produto deletado com sucesso'
             ]);
     }
+
+     /**
+     * Update the chocolate bar selected
+     *
+     * @param int myid
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function getChocolate(){
+        return 'hello world';
+    }
 }

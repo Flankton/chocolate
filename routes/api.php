@@ -20,6 +20,8 @@ use App\Http\Controllers\UserController;
 
 Route::get('/greeting', [UserController::class, 'index']);
 
+Route::get('/', [UserController::class, 'index']);
+
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -35,4 +37,6 @@ Route::prefix('/private')->group(function () {
 Route::prefix('/public')->group(function () {
     Route::resource('/chocolate_bar', ChocolateBarController::class)
     ->except(['create', 'edit']);
+
+    Route::get('/public_chocolate', [ChocolateBarController::class, 'getChocolate']);
 });
