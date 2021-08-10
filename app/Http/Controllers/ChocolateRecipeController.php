@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\ChocolateRecipe;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use phpDocumentor\Reflection\Types\Boolean;
+use Illuminate\Database\Eloquent\Builder;
 
 class ChocolateRecipeController extends Controller
 {
@@ -73,9 +75,16 @@ class ChocolateRecipeController extends Controller
                 'weight',
             ]);
 
+            if($this->limitOrganic($request->weight, $request->chocolate_bar_id)){
+                return response()->json([
+                    'code'      =>  403,
+                    'message'   =>  'Limite de lote não organico ultrapassado! Verifique o peso e tente novamente'
+                ]);
+            }
+
             if($this->limitWeight($request->chocolate_bar_id, $request->weight)){
                 return response()->json([
-                    'code'      =>  401,
+                    'code'      =>  403,
                     'message'   =>  'Limite de peso ultrapassado'
                 ]);
             }
@@ -157,7 +166,8 @@ class ChocolateRecipeController extends Controller
             ]);
     }
 
-    private function limitWeight($chocolateId, $weight){
+    private function limitWeight($chocolateId, $weight) : bool
+    {
         $weightMax = ChocolateRecipe::where('chocolate_bar_id', $chocolateId)
             ->sum('weight');
         
@@ -167,4 +177,30 @@ class ChocolateRecipeController extends Controller
             return false;
     }
 
+    /**
+     * Verify limit of organic cocoa
+     * 
+     * @param string weightIn
+     * @param int $barId
+     * 
+     * @return bool
+     */
+    private function limitOrganic($weightIn, $barId) : bool
+    {
+        $organic = ChocolateRecipe::where([
+            'chocolate_bar_id' => $barId,
+            'deleted' => false
+        ])
+        ->whereHas('cocoaLote', function (Builder $cocoaLote) {
+            $cocoaLote->where([
+                'organic' => false,
+                'deleted' => false
+            ]);
+        })->sum('weight');
+
+        if($organic+$weightIn>50){
+            return true;
+        }
+        return false;
+    }
 }
