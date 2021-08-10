@@ -23,14 +23,14 @@ class ChocolateBarController extends Controller
             ]);
         }
 
-        $ChocolateBar = ChocolateBar::where([
+        $chocolateBar = ChocolateBar::where([
             'id' => $myId,
             'deleted' => false]
             )
         ->with('recipes')
         ->first();
 
-        return response()->json($ChocolateBar);
+        return response()->json($chocolateBar);
         
     }
 
@@ -42,10 +42,10 @@ class ChocolateBarController extends Controller
     public function index() : JsonResponse
     {
         
-        $ChocolateBars = ChocolateBar::where('deleted', false)
+        $chocolateBars = ChocolateBar::where('deleted', false)
         ->get();
 
-        return response()->json($ChocolateBars);
+        return response()->json($chocolateBars);
         
     }
 
@@ -97,12 +97,12 @@ class ChocolateBarController extends Controller
 
             $data['updated_at_at'] = date('Y-m-d H:i:s');
             
-            $ChocolateBar = ChocolateBar::where([
+            $chocolateBar = ChocolateBar::where([
                 'id' => $myId,
                 'deleted' => false]
                 )->first();
 
-            $ChocolateBar->update($data);
+            $chocolateBar->update($data);
 
             return response()->json([
                 'code'      =>  200,
@@ -127,10 +127,10 @@ class ChocolateBarController extends Controller
                 ]);
             }
             
-            $ChocolateBar = ChocolateBar::where('id', $myId)->first();
+            $chocolateBar = ChocolateBar::where('id', $myId)->first();
 
-            $ChocolateBar['deleted'] = true;
-            $ChocolateBar->update();
+            $chocolateBar['deleted'] = true;
+            $chocolateBar->update();
 
             return response()->json([
                 'code'      =>  200,
@@ -142,10 +142,23 @@ class ChocolateBarController extends Controller
      * Update the chocolate bar selected
      *
      * @param int myid
-     * @param Request $request
      * @return JsonResponse
      */
-    public function getChocolate(){
-        return 'hello world';
+    public function getChocolate($myId) : JsonResponse
+    {
+        $chocolate = ChocolateBar::where([
+            'public_id' => $myId,
+            'deleted' => false
+        ])
+        ->with(['recipes' => function($recipe){
+            $recipe->where('deleted', false)
+                    ->with(['cocoaLote' => function($cocoaLote){
+                        $cocoaLote->where('deleted', false)
+                        ->with('provider');
+                    }]);
+        }])
+        ->get();
+
+        return response()->json($chocolate);
     }
 }

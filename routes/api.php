@@ -38,5 +38,5 @@ Route::prefix('/public')->group(function () {
     Route::resource('/chocolate_bar', ChocolateBarController::class)
     ->except(['create', 'edit']);
 
-    Route::get('/public_chocolate', [ChocolateBarController::class, 'getChocolate']);
+    Route::get('/chocolate/{public_id}', [ChocolateBarController::class, 'getChocolate']);
 });

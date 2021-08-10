@@ -166,6 +166,14 @@ class ChocolateRecipeController extends Controller
             ]);
     }
 
+    /**
+     * Verify limit of organic cocoa
+     * 
+     * @param string weightIn
+     * @param int $chocolateId
+     * 
+     * @return bool
+     */
     private function limitWeight($chocolateId, $weight) : bool
     {
         $weightMax = ChocolateRecipe::where('chocolate_bar_id', $chocolateId)
