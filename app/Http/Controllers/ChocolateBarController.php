@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ChocolateBar;
+use App\Models\ChocolateRecipe;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -157,8 +159,28 @@ class ChocolateBarController extends Controller
                         ->with('provider');
                     }]);
         }])
-        ->get();
-
+        ->first();
+        $chocolate['porcent_inorganic'] = $this->sumWeight($chocolate->id);
+        $chocolate['porcent_organic'] = (100-$chocolate->porcent_inorganic);
         return response()->json($chocolate);
+    }
+
+    private function sumWeight($chocoId)
+    {
+        $organic = ChocolateRecipe::where([
+            'chocolate_bar_id' => $chocoId,
+            'deleted' => false
+        ])
+        ->whereHas('cocoaLote', function (Builder $cocoaLote) {
+            $cocoaLote->where([
+                'organic' => false,
+                'deleted' => false
+            ]);
+        })->sum('weight');
+        if(!isset($organic)){
+            abort(404);
+        }
+        $porcent = ($organic*100)/500;
+        return $porcent;
     }
 }
